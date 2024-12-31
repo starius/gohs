@@ -144,13 +144,13 @@ func CompileExtMulti(p Patterns, mode CompileMode, info *hs.PlatformInfo,
 	patterns := p.Patterns()
 
 	cexprs := (**C.char)(C.calloc(C.size_t(len(patterns)), C.size_t(unsafe.Sizeof(uintptr(0)))))
-	exprs := (*[1 << 30]*C.char)(unsafe.Pointer(cexprs))[:len(patterns):len(patterns)]
+	exprs := unsafe.Slice(cexprs, len(patterns))
 
 	cflags := (*C.uint)(C.calloc(C.size_t(len(patterns)), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	flags := (*[1 << 30]C.uint)(unsafe.Pointer(cflags))[:len(patterns):len(patterns)]
+	flags := unsafe.Slice(cflags, len(patterns))
 
 	cids := (*C.uint)(C.calloc(C.size_t(len(patterns)), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	ids := (*[1 << 30]C.uint)(unsafe.Pointer(cids))[:len(patterns):len(patterns)]
+	ids := unsafe.Slice(cids, len(patterns))
 
 	for i, pattern := range patterns {
 		exprs[i] = C.CString(pattern.Expression)

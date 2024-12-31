@@ -71,16 +71,16 @@ func CompileLitMulti(input Literals, mode ModeFlag, info *PlatformInfo) (Databas
 	count := len(literals)
 
 	cexprs := (**C.char)(C.calloc(C.size_t(len(literals)), C.size_t(unsafe.Sizeof(uintptr(0)))))
-	exprs := (*[1 << 30]*C.char)(unsafe.Pointer(cexprs))[:len(literals):len(literals)]
+	exprs := unsafe.Slice(cexprs, len(literals))
 
 	clens := (*C.size_t)(C.calloc(C.size_t(len(literals)), C.size_t(unsafe.Sizeof(uintptr(0)))))
-	lens := (*[1 << 30]C.size_t)(unsafe.Pointer(clens))[:len(literals):len(literals)]
+	lens := unsafe.Slice(clens, len(literals))
 
 	cflags := (*C.uint)(C.calloc(C.size_t(len(literals)), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	flags := (*[1 << 30]C.uint)(unsafe.Pointer(cflags))[:len(literals):len(literals)]
+	flags := unsafe.Slice(cflags, len(literals))
 
 	cids := (*C.uint)(C.calloc(C.size_t(len(literals)), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	ids := (*[1 << 30]C.uint)(unsafe.Pointer(cids))[:len(literals):len(literals)]
+	ids := unsafe.Slice(cids, len(literals))
 
 	for i, lit := range literals {
 		exprs[i] = C.CString(lit.Expr)

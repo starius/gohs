@@ -404,16 +404,16 @@ func CompileMulti(input Patterns, mode ModeFlag, info *PlatformInfo) (Database, 
 	count := len(patterns)
 
 	cexprs := (**C.char)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(uintptr(0)))))
-	exprs := (*[1 << 30]*C.char)(unsafe.Pointer(cexprs))[:count:count]
+	exprs := unsafe.Slice(cexprs, count)
 
 	cflags := (*C.uint)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	flags := (*[1 << 30]C.uint)(unsafe.Pointer(cflags))[:count:count]
+	flags := unsafe.Slice(cflags, count)
 
 	cids := (*C.uint)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(C.uint(0)))))
-	ids := (*[1 << 30]C.uint)(unsafe.Pointer(cids))[:count:count]
+	ids := unsafe.Slice(cids, count)
 
 	cexts := (**C.hs_expr_ext_t)(C.calloc(C.size_t(count), C.size_t(unsafe.Sizeof(uintptr(0)))))
-	exts := (*[1 << 30]*C.hs_expr_ext_t)(unsafe.Pointer(cexts))[:count:count]
+	exts := unsafe.Slice(cexts, count)
 
 	for i, pattern := range patterns {
 		exprs[i] = C.CString(pattern.Expr)
