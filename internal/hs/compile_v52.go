@@ -37,7 +37,7 @@ func CompileLit(expression string, flags CompileFlag, mode ModeFlag, info *Platf
 
 	defer C.free(unsafe.Pointer(expr))
 
-	ret := C.hs_compile_lit(expr, C.uint(flags), C.ulong(len(expression)), C.uint(mode), platform, &db, &err)
+	ret := C.hs_compile_lit(expr, C.uint(flags), C.size_t(len(expression)), C.uint(mode), platform, &db, &err)
 
 	if err != nil {
 		defer C.hs_free_compile_error(err)
